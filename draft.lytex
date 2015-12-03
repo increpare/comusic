@@ -1,0 +1,241 @@
+\documentclass{article}
+
+\usepackage{tikz}
+
+\usepackage{tkz-graph}
+\usepackage{graphviz}
+\usepackage{dot2texi}
+\usepackage{amsmath}
+
+\usetikzlibrary{calc,positioning,decorations.text}
+
+\tikzset{ }
+\thispagestyle{empty}
+\begin{document}
+
+Here's an elementary example of 3-part species counterpoint \footnote{We're ignoring rules about different interval types (diminished fifth), ones that pertain to degree function (leading note stuff), and any ones specific to bass-specific ones.  Only rules involving interval and melodic shape are allowed.}:
+
+\begin{lilypond}
+\new GrandStaff << 
+\new Staff { \clef "treble" c''1-2 d''1-3 e''1-5 f''1-3 }
+\new Staff { \clef "alto" f1-5 d1-2 e1-4 f1-2  }
+\new Staff { \clef "bass" c1-5 d1-2 e1-4 f1-2  }
+>>
+
+\layout {
+    \context {
+      \Score
+      \override SpacingSpanner.base-shortest-duration = #(ly:make-moment 1)
+    }
+  }
+\end{lilypond}
+
+Here are three melody shapes that can be transposed so that any two of them can be played with eachother, but not all three at the same time.
+
+\begin{lilypond}
+\new GrandStaff << 
+\new Staff { \clef "treble" <<
+\tweak color #red
+c''1 
+\tweak color #darkgreen
+e''1-3>> <<
+\tweak color #red
+d''1 
+\tweak color #darkgreen
+e''1-2>> <<
+\tweak color #red
+e''1 
+\tweak color #darkgreen
+g''1-1>> <<
+\tweak color #red
+f''1 
+\tweak color #darkgreen
+a''1-5>>}
+>>
+\layout {
+    \context {
+      \Score
+      \override SpacingSpanner.base-shortest-duration = #(ly:make-moment 1)
+    }
+  }
+\end{lilypond} \begin{lilypond}
+\new GrandStaff << 
+\new Staff { \clef "treble" <<
+\tweak color #blue
+c''1 
+\tweak color #darkgreen
+e''1-3>> <<
+\tweak color #blue
+d''1 
+\tweak color #darkgreen
+e''1-2>> <<
+\tweak color #blue
+e''1 
+\tweak color #darkgreen
+g''1-1>> <<
+\tweak color #blue
+f''1 
+\tweak color #darkgreen
+a''1-5>>}
+>>
+\layout {
+    \context {
+      \Score
+      \override SpacingSpanner.base-shortest-duration = #(ly:make-moment 1)
+    }
+  }
+\end{lilypond}  \begin{lilypond}
+\new GrandStaff << 
+\new Staff { \clef "treble" <<
+\tweak color #red
+c''1 
+\tweak color #blue
+e''1-3>> <<
+\tweak color #red
+d''1 
+\tweak color #blue
+e''1-2>> <<
+\tweak color #red
+e''1 
+\tweak color #blue
+g''1-1>> <<
+\tweak color #red
+f''1 
+\tweak color #blue
+a''1-5>>}
+>>
+\layout {
+    \context {
+      \Score
+      \override SpacingSpanner.base-shortest-duration = #(ly:make-moment 1)
+    }
+  }
+\end{lilypond} 
+
+We can put these together using a modified version of the 3-part notation:
+
+\begin{lilypond}
+\new GrandStaff << 
+\new Staff { \clef "treble" 
+\tweak color #red
+c''1-2 
+\tweak color #red
+d1-3 
+\tweak color #red
+e1-5 
+\tweak color #red
+f1-3}
+\new Staff { \clef "alto" 
+\tweak color #darkgreen
+c1-5 
+\tweak color #darkgreen
+d1-2 
+\tweak color #darkgreen
+e1-4 
+\tweak color #darkgreen
+f1-2 }
+\new Staff { \clef "bass" 
+\tweak color #blue
+c1-5 
+\tweak color #blue
+d1-2 
+\tweak color #blue
+e1-4 
+\tweak color #blue
+f1-2 
+}
+>>
+\end{lilypond}  
+
+Note that the interval numbers no longer add up correctly; the clefs are a fiction to make comparing adjoining staves easier. To work out if the counterpoint is correct, you need to know the intervals and the shape of the melody - you ignore the clefs.
+
+This is an impossible to perform composition in the same way that this penrose triangle is impossible to realize\footnote{cf penrose's paper for the geometrical analogue of what is to follow 
+http://www.iri.upc.edu/people/ros/StructuralTopology/ST17/st17-05-a2-ocr.pdf }:
+
+\begin{tikzpicture}[scale=0.25, line join=bevel]
+
+% \a and \b are two macros defining characteristic
+% dimensions of the Penrose triangle.       
+\pgfmathsetmacro{\a}{1.8}
+\pgfmathsetmacro{\b}{0.7}
+
+\tikzset{%
+  apply style/.code     = {\tikzset{#1}},
+  triangle_edges/.style = {thick,draw=black}
+}
+
+\foreach \theta/\facestyle in {%
+    0/{triangle_edges, fill = white},
+  120/{triangle_edges, fill = white},
+  240/{triangle_edges, fill = white}%
+}{
+  \begin{scope}[rotate=\theta]
+    \draw[apply style/.expand once=\facestyle]
+      ({-sqrt(3)/2*\a},{-0.5*\a})                     --
+      ++  (-\b,0)                                       --
+        ({0.5*\b},{\a+3*sqrt(3)/2*\b})                -- % higher point 
+        ({sqrt(3)/2*\a+2.5*\b},{-.5*\a-sqrt(3)/2*\b}) -- % rightmost point
+      ++({-.5*\b},-{sqrt(3)/2*\b})                    -- % lower point
+        ({0.5*\b},{\a+sqrt(3)/2*\b})                  --
+      cycle;
+
+    \end{scope}
+  } 
+ \end{tikzpicture}
+
+If any two staves are present, the composition can be realized (transposition of one clef might be needed), but all three parts cannot be combined together.
+
+Take the first example given above of a vanilla counterpoint exercise. We can represent the starting pitches with a graph, where vertices are the pitches:
+
+\includegraphics[scale=0.5]{graph1.eps}
+
+note that if you travel in a loop, adding numbers as you go (or subtracting if you're going against an arrow), you get $7+5-12=0$. It adds up to zero.
+
+For our other graph, we no longer have fixed base positions, so we don't label the vertices, but we can still label the edges, to get this:
+  
+\includegraphics[scale=0.5]{graph2.eps}
+
+Note that the triangle no longer adds to $0$, but to $2$. Here's a made up graph of a more complicated system:
+
+\includegraphics[scale=0.5]{graph3.eps}
+
+If we're looking at a graph that shows what intervals are compatible between melodies, and we're looking for triangles where the intervals sum to zero.  (For four-part counterpoints, we're looking for tetrahedra where all the constituent triangles sum to zero).
+
+If I have a graph of intervals where all the circular paths sum to zero, I can assign definite pitches to each melody.
+
+Here's the analogy with manifolds and cohomological language:
+
+\begin{tabular}{ | c | c | c| }
+\hline
+  Manifold          &  \v{C}ech Cohomology    &  Counterpoint System \\
+  \hline  
+  atlas             &                         &  set of melodies \\
+  chart             &   vertex                &  melody \\
+  transition area   &   edges                 &  harmonizing pair \\
+                    &   nerve                 &  graph of melodies+intervals  \\
+                    &   1-cocycle             &  interval choice            \\
+                    &   1-coboundary          &  compatible intervals       \\
+                    &   0-cocycle             &  assignment of pitches      \\
+                    \hline
+\end{tabular}
+
+Define $H(m_1,m_2,i)$ to be true iff $m_1$ harmonizes with $m_2$ when at interval $i$.  
+
+It's possible (and fun) to just go and write 3-staff counterpoints by hand, but here's a more algorithmic approach:
+
+\begin{itemize}
+  \item Start with a set $M$ of melodies and a number $v$ which is the maximum voice separation.
+  \item Generate a graph $G$ with a set of vertices $M$, with labelled edges:
+      $E = \{ (m_1\xrightarrow{i} m_2) | m_1,m_2 \in M, 0<i\leq v, H(m_1,m_2,i) \}$. You can view this as a directed graph with a 1-cocycle.
+  \item Complete subgraphs of $G$ in which all triangles sum to 0 are realizable counterpoints.
+\end{itemize}
+
+Notes: 
+\begin{itemize}
+\item You can leave the diatonic world and take a set of chromatic constraints instead - it no longer is so nicely notatable with diatonic clefs, but computationally it's much the same, and can distinguish major/minor/diminished intervals.
+\item Also, there's no reason this wouldn't work for higher species.
+\item There's a balance to be struck between trying to adhere to mathematical formalism and trying to make it clear in and of itself.  I don't know how deeply the relationship goes - I don't think cohomology is the natural end-point for it - it branches off from the Čech cohomology construction before the cohomology group has been even defined (Penrose's paper basically did as well).  
+I'd probably be more inclined to take a computational direction first, implement something where if you give it a bunch of melody shapes it'll plot a nice graph of them, and see if anything interesting pops up from that.
+\item You could do a reverse search where you specify a graph and it fills it out with melodies. That could be used to produce some contrapuntal curiosities.
+\end{itemize}
+\end{document}

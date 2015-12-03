@@ -1,0 +1,10 @@
+digraph G {
+	splines=curved;
+	node [shape=circle fixedsize=true width=0.25 height=0.25 ]
+	a -> b [ xlabel="7"];
+	a -> c [ xlabel="5"];
+	a -> d [ xlabel="10" ];
+	b -> c [ xlabel="4" ];
+	b -> d [ xlabel="6" ];
+	c -> d [ xlabel="7" ];
+}

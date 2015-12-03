@@ -1,0 +1,6 @@
+digraph G {
+	node [shape=circle fixedsize=true width=0.25 height=0.25 ]
+	a -> b [ xlabel="7"];
+	b -> c [ xlabel="5"];
+	a -> c [ xlabel="10" ];
+}

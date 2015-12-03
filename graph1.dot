@@ -1,0 +1,9 @@
+digraph G {
+	node [shape=circle fixedsize=true width=0.25 height=0.25 ]
+	a [xlabel="0" label="a"]
+	b [xlabel="7" label="b"]
+	c [xlabel="12'" label="c"]
+	a -> b [ xlabel="7"];
+	b -> c [ xlabel="5"];
+	a -> c [ xlabel="12" ];
+}

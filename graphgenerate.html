@@ -1,0 +1,174 @@
+<html>
+<head>
+<script src="js/viz.js" type="text/javascript" charset="utf-8"></script>
+<script>
+function mkp(note){
+	if (perfect.indexOf(note)>=0){
+		return "<b>"+note+"</b>";
+	} else {
+		return note;
+	}
+}
+function printTable(chords,perfect){
+	var s = "";
+	for(var i=0;i<chords.length;i++){
+		var c = chords[i].map(mkp);
+
+		s+="("+c[0]+","+c[1]+","+c[2]+") ";
+	}	
+	return s;
+}
+
+function validCounterpoint(m1,m2,displacement){
+	//counterpoint only depends on intervals and relative motions
+	var intervals=[];
+	for (var i=0;i<m1.length;i++){
+		var diff = m2[i]-m1[i]+displacement;
+		if (diff<=0){
+			return false;
+		}
+		intervals.push(diff);
+		if (validIntervals.indexOf(diff%octave)<0){
+			return false;
+		}
+	}
+	var motions=["contrary"];//"contrary","oblique","parallel","similar","equal"
+	for (var i=1;i<m1.length;i++){
+		var dm1=m1[i]-m1[i-1];
+		var dm2=m2[i]-m2[i-1];
+
+		if (dm1==0 && dm2==0){
+			motions.push("equal");
+		} else if (dm1==dm2){
+			motions.push("parallel");
+		} else if (dm1==0||dm2==0){
+			motions.push("oblique");
+		} else if (dm1*dm2<0){
+			motions.push("contrary");
+		} else {
+			motions.push("similar");
+		}
+	}
+	for (var i=0;i<intervals.length;i++){
+		var interval=intervals[i];
+		var intervalpc=interval%octave;
+		if (perfect.indexOf(intervalpc)>=0){
+			var motion=motions[i];
+			if (motion=="oblique"||motion=="contrary"||motion=="equal"){
+				//all good
+			} else {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+var image;
+function calcualteCounterpoints(){
+	var str_perfect = document.getElementById("perfect").value;
+	var str_imperfect = document.getElementById("imperfect").value;
+	var str_octave = document.getElementById("octave").value;
+	var str_melodies = document.getElementById("melodies").value;
+
+
+	perfect = str_perfect.split(",").map(Number);
+	perfect.push(0);
+	imperfect = str_imperfect.split(",").map(Number);
+	octave = parseInt(str_octave);
+	validIntervals = perfect.concat(imperfect);
+
+	var str_melodyar = str_melodies.split("\n");
+	var melodies=[];
+	melodynames=[];
+	for (var i=0;i<str_melodyar.length;i++){
+		var s = str_melodyar[i];
+		if (s.trim().length==0){
+			continue;
+		}
+		melodynames.push(s.split(",")[0]);
+		var m = s.split(",").slice(1).map(Number);
+		if (i>0&&m.length!=melodies[i-1].length){
+			alert("all melodies must be of same length").
+			return;
+		}
+		melodies.push(m);
+	}
+
+	var result = [];
+	for (var i=0;i<melodies.length;i++){
+		var m1 = melodies[i];
+		for (var j=0;j<melodies.length;j++){
+			if (j===i){
+				continue;
+			}
+			var m2 = melodies[j];
+			for (var k=-octave;k<=octave;k++){
+				if (validCounterpoint(m1,m2,k)){
+					//check it's not already there
+					var found=false;
+					for (var l=0;l<result.length;l++){
+						var r=result[l];
+						if (
+							( (r[0]==i&&r[1]==j)|| (r[1]==i&&r[0]==j) )
+							&&
+							((k+10*octave)%octave)==(r[2]+10*octave)%octave)
+						{
+								found=true;
+							
+								break;						
+							
+						}
+					}
+					if (!found){
+						result.push([i,j,k]);
+					}
+				}
+			}
+		}
+	}
+	var output="digraph G {\nlayout=circo\n";
+	for (var i=0;i<result.length;i++){
+		var r = result[i];
+		output += melodynames[r[0]]+"->" +melodynames[r[1]]+"[label="+r[2]+"]\n";
+	}
+	output+="\n}";
+	if (image!=null){
+		document.body.removeChild(image);
+	}
+	image = Viz(output, { format: "png-image-element" });
+	document.body.appendChild(image);
+	document.getElementById("output").innerHTML = "";
+	if (result.length==0){
+		document.getElementById("output").innerHTML = "no results found :(";
+	}
+}
+</script>
+</head>
+<body>
+(intervals are 0-based, i.e. unison=0)
+<p>
+melodies:
+<p>
+<textarea rows="4" cols="50" id="melodies">
+cat,0,2
+dog,0,0
+</textarea>
+<p>
+octave:
+<p>
+<input id="octave" value="7">
+<p>
+perfect intervals (0-based):
+<p>
+<input id="perfect" value="4">
+<p>
+imperfect intervals:
+<p>
+<input id="imperfect" value="2,5">
+<p>
+<button type="button" onclick="calcualteCounterpoints()">calculate</button>
+<p>
+<div id = "output"></div>
+<script>calcualteCounterpoints();</script>
+</body>
+</html>

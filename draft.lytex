@@ -38,10 +38,12 @@ First, I'm numbering intervals from 0 (unison is 0, third is 2, &c.).
 Going to use a toy model of species counterpoint for this\footnote{we could use a more detailed one as well, though not the full set of species rules.\cdots}:
 
 \begin{itemize}
-\item Perfect consonances are unison (0) and fifth (4).
+\item Perfect consonances are fifth (4) and octave (7).
 \item Imperfect consonances are third (2) and sixth (5).
 \item Perfect consonances must be approached by contrary or oblique motion.
 \item No restriction on melodic intervals.
+\item No unisons or crossing of voices.
+\item No more than two imperfect consonances in a row.
 \item Harmonic intervals must be perfect or imperfect.
 \end{itemize}
 

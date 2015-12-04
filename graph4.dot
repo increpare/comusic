@@ -1,0 +1,10 @@
+graph G {
+	splines=curved;
+	nodesep=2;
+	node [shape=circle fixedsize=true width=0.3 height=0.3 ]
+	m1 [ label="a" ]
+	m2 [ label="b" ]
+	o1 [label="?"]
+	m1 -- o1 
+	m2 -- o1
+}

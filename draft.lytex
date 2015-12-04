@@ -6,6 +6,26 @@
 \usepackage{graphviz}
 \usepackage{dot2texi}
 \usepackage{amsmath}
+\usepackage{amsfonts}
+  
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{proof}[1][Proof]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{definition}[1][Definition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{example}[1][Example]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{remark}[1][Remark]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\newcommand{\qed}{\nobreak \ifvmode \relax \else
+      \ifdim\lastskip<1.5em \hskip-\lastskip
+      \hskip1.5em plus0em minus0.5em \fi \nobreak
+      \vrule height0.75em width0.5em depth0.25em\fi}
 
 \usetikzlibrary{calc,positioning,decorations.text}
 
@@ -13,13 +33,25 @@
 \thispagestyle{empty}
 \begin{document}
 
-Here's an elementary example of 3-part species counterpoint \footnote{We're ignoring rules about different interval types (diminished fifth), ones that pertain to degree function (leading note stuff), and any ones specific to bass-specific ones.  Only rules involving interval and melodic shape are allowed.}:
+First, I'm numbering intervals from 0 (unison is 0, third is 2, &c.).
+
+Going to use a toy model of species counterpoint for this\footnote{we could use a more detailed one as well, though not the full set of species rules.\cdots}:
+
+\begin{itemize}
+\item Perfect consonances are unison (0) and fifth (4).
+\item Imperfect consonances are third (2) and sixth (5).
+\item Perfect consonances must be approached by contrary or oblique motion.
+\item No restriction on melodic intervals.
+\item Harmonic intervals must be perfect or imperfect.
+\end{itemize}
+
+Here's an elementary example of 3-part species counterpoint:
 
 \begin{lilypond}
 \new GrandStaff << 
-\new Staff { \clef "treble" c''1-2 d''1-3 e''1-5 f''1-3 }
-\new Staff { \clef "alto" f1-5 d1-2 e1-4 f1-2  }
-\new Staff { \clef "bass" c1-5 d1-2 e1-4 f1-2  }
+\new Staff \with { instrumentName = #"A"} { \clef "treble" c''1-2 d''1-3 e''1-5 f''1-3 }
+\new Staff \with { instrumentName = #"B"} { \clef "alto" f1-5 d1-2 e1-4 f1-2  }
+\new Staff \with { instrumentName = #"C"} { \clef "bass" c1-5 d1-2 e1-4 f1-2  }
 >>
 
 \layout {
@@ -115,8 +147,10 @@ a''1-5>>}
 We can put these together using a modified version of the 3-part notation:
 
 \begin{lilypond}
-\new GrandStaff << 
-\new Staff { \clef "treble" 
+\new GrandStaff<< 
+\new Staff \with { instrumentName = #"A"} { 
+\clef "treble" 
+\override Staff.Clef.color = #grey
 \tweak color #red
 c''1-2 
 \tweak color #red
@@ -125,7 +159,9 @@ d1-3
 e1-5 
 \tweak color #red
 f1-3}
-\new Staff { \clef "alto" 
+\new Staff \with { instrumentName = #"B"} { 
+\override Staff.Clef.color = #grey
+\clef "alto" 
 \tweak color #darkgreen
 c1-5 
 \tweak color #darkgreen
@@ -134,7 +170,9 @@ d1-2
 e1-4 
 \tweak color #darkgreen
 f1-2 }
-\new Staff { \clef "bass" 
+\new Staff \with { instrumentName = #"C"} { 
+\override Staff.Clef.color = #grey
+\clef "bass" 
 \tweak color #blue
 c1-5 
 \tweak color #blue
@@ -185,7 +223,7 @@ http://www.iri.upc.edu/people/ros/StructuralTopology/ST17/st17-05-a2-ocr.pdf }:
 
 If any two staves are present, the composition can be realized (transposition of one clef might be needed), but all three parts cannot be combined together.
 
-Take the first example given above of a vanilla counterpoint exercise. We can represent the starting pitches with a graph, where vertices are the pitches:
+Take the first example given above of a vanilla counterpoint exercise. We can represent the starting pitches using integers - melody $A$ starts on $c$, which we'll call $0$, so let's notate it as $A@0$.  And let's put the intervals on the edges.
 
 \includegraphics[scale=0.5]{graph1.eps}
 
@@ -219,23 +257,44 @@ Here's the analogy with manifolds and cohomological language:
                     \hline
 \end{tabular}
 
-Define $H(m_1,m_2,i)$ to be true iff $m_1$ harmonizes with $m_2$ when at interval $i$.  
+\begin{definition}
+$H(m_1,m_2,i)$ express the proposition ``$m_1$ harmonizes with $m_2$ when at interval $i$.''
+\end{definition}
 
 It's possible (and fun) to just go and write 3-staff counterpoints by hand, but here's a more algorithmic approach:
 
 \begin{itemize}
-  \item Start with a set $M$ of melodies and a number $v$ which is the maximum voice separation.
+  \item Start with a set $M$ of melodies.
   \item Generate a graph $G$ with a set of vertices $M$, with labelled edges:
-      $E = \{ (m_1\xrightarrow{i} m_2) | m_1,m_2 \in M, 0<i\leq v, H(m_1,m_2,i) \}$. You can view this as a directed graph with a 1-cocycle.
+
+      \begin{equation*}
+      E = \{ (m_1\xrightarrow{i} m_2) | m_1,m_2 \in M, i \in \mathbb{Z}, H(m_1,m_2,i) \}
+      \end{equation*}
+
+      You can view this as a directed graph with a 1-cocycle.
   \item Complete subgraphs of $G$ in which all triangles sum to 0 are realizable counterpoints.
 \end{itemize}
 
 Notes: 
 \begin{itemize}
-\item You can leave the diatonic world and take a set of chromatic constraints instead - it no longer is so nicely notatable with diatonic clefs, but computationally it's much the same, and can distinguish major/minor/diminished intervals.
+\item Mostly what appeals to me about this idea is the idea of an ``impossible'' species counterpont. 
+\item In terms of compositional usefulness, I think having a tool that you could input melodies into and that would output you a graph of possible ways of putting them together might be nice to have.
+\item 
+\item You can leave the diatonic world and take a set of chromatic constraints instead - it no longer is so nicely notatable with regular clefs, but computationally it's much the same, and can distinguish major/minor/diminished intervals properly.
 \item Also, there's no reason this wouldn't work for higher species.
 \item There's a balance to be struck between trying to adhere to mathematical formalism and trying to make it clear in and of itself.  I don't know how deeply the relationship goes - I don't think cohomology is the natural end-point for it - it branches off from the Čech cohomology construction before the cohomology group has been even defined (Penrose's paper basically did as well).  
 I'd probably be more inclined to take a computational direction first, implement something where if you give it a bunch of melody shapes it'll plot a nice graph of them, and see if anything interesting pops up from that.
-\item You could do a reverse search where you specify a graph and it fills it out with melodies. That could be used to produce some contrapuntal curiosities.
+You could also ask questions like ``what melody has the most/fewest harmonizations''?  The answer would be an artefact of the countrapuntal moda sd
+\item You could do a reverse search where you specify a graph and it fills it out with melodies. That could be used to produce some contrapuntal curiosities, perhaps - maybe if you have two melodies that don't harmonize with eachother, you could search to see if you could find some set of accompanying melodies that can be combined with either of them.
+\item There's probably some category theory flavoured version of this possible as well (melodies are objects, valid harmonizations are morphisms).  
+
+A direction would be to ask what properties this category has - given two melodies, is there always a third that harmonizes with both? 
+\includegraphics[scale=0.5]{graph4.eps}
+
+Any interesting functors or natural transformations? I haven't thought this through at all, just thinking out loud.
+
+\item this is mostly me throwing associations at it seeing what sticks. Someone sees a black car and, remembering that they once had a black cat, asks if it meows.
+
+\item have a look at other papers that reference that Penrose paper, maybe there are some further fun tools that could be applicable there.
 \end{itemize}
 \end{document}

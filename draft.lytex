@@ -7,7 +7,10 @@
 \usepackage{dot2texi}
 \usepackage{amsmath}
 \usepackage{amsfonts}
-  
+\usepackage{hyperref}
+\usepackage{wrapfig}
+
+
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
@@ -33,17 +36,14 @@
 \thispagestyle{empty}
 \begin{document}
 
-First, I'm numbering intervals from 0 (unison is 0, third is 2, \&c.).
-
-Going to use a toy model of species counterpoint for this\footnote{we could use a more detailed one as well, though not the full set of species rules...}:
+Going to use a toy model of species counterpoint for the purposes of explanation:
 
 \begin{itemize}
-\item Perfect consonances are fifth (4) and octave (7).
-\item Imperfect consonances are third (2) and sixth (5).
+\item Perfect consonances are fifth (4)\footnote{I'm numbering intervals counting from 0 (=unison).} and octave (7).
+\item Imperfect consonances are third (2), fourth (3), and sixth (5).
 \item Perfect consonances must be approached by contrary or oblique motion.
 \item No restriction on melodic intervals.
 \item No unisons or crossing of voices.
-\item No more than two imperfect consonances in a row.
 \item Harmonic intervals must be perfect or imperfect.
 \end{itemize}
 
@@ -187,63 +187,50 @@ f1-2
 >>
 \end{lilypond}  
 
-Note that the interval numbers no longer add up correctly; the clefs are a fiction to make comparing adjoining staves easier. To work out if the counterpoint is correct, you need to know the intervals and the shape of the melody - you ignore the clefs.
+But the interval numbers no longer add up vertically!  But they do have $bottom+medium+3=top$. We call $3$ the obstruction. The clefs are a fiction to make comparing adjoining staves easier. To work out if the counterpoint is correct, you need to know the intervals and the shape of the melody - you ignore the clefs.
 
-This is an impossible to perform composition in the same way that this penrose triangle is impossible to realize\footnote{cf penrose's paper for the geometrical analogue of what is to follow 
-http://www.iri.upc.edu/people/ros/StructuralTopology/ST17/st17-05-a2-ocr.pdf }:
+To write counterpoint of this form by hand, you use the following method.
 
-\begin{tikzpicture}[scale=0.25, line join=bevel]
+\begin{itemize}
+\item Pick a source melody to harmonize.
+\item Pick an obstruction.
+\item Write out all the chords that generate this obstruction\footnote{I made a page here that generates them for you :
+\url{https://ded.increpare.com/~locus/comusic/chordgenerate.html generates them}.}.
+\item Fill in the rest of the counterpoint.
+\end{itemize}
 
-% \a and \b are two macros defining characteristic
-% dimensions of the Penrose triangle.       
-\pgfmathsetmacro{\a}{1.8}
-\pgfmathsetmacro{\b}{0.7}
+This is an impossible to perform composition in the same way that the Penrose triangle is impossible to realize\footnote{cf Penrose's paper for the geometrical analogue of what is to follow :
+\url{http://www.iri.upc.edu/people/ros/StructuralTopology/ST17/st17-05-a2-ocr.pdf}. }:
 
-\tikzset{%
-  apply style/.code     = {\tikzset{#1}},
-  triangle_edges/.style = {thick,draw=black}
-}
+\begin{center}
+\includegraphics[width=0.48\textwidth]{tribar}
+\end{center}
 
-\foreach \theta/\facestyle in {%
-    0/{triangle_edges, fill = white},
-  120/{triangle_edges, fill = white},
-  240/{triangle_edges, fill = white}%
-}{
-  \begin{scope}[rotate=\theta]
-    \draw[apply style/.expand once=\facestyle]
-      ({-sqrt(3)/2*\a},{-0.5*\a})                     --
-      ++  (-\b,0)                                       --
-        ({0.5*\b},{\a+3*sqrt(3)/2*\b})                -- % higher point 
-        ({sqrt(3)/2*\a+2.5*\b},{-.5*\a-sqrt(3)/2*\b}) -- % rightmost point
-      ++({-.5*\b},-{sqrt(3)/2*\b})                    -- % lower point
-        ({0.5*\b},{\a+sqrt(3)/2*\b})                  --
-      cycle;
+If any two pieces/melodies are present, the figure/composition can be realized (transposition of one clef might be needed), but all three parts cannot be combined together at once.
 
-    \end{scope}
-  } 
- \end{tikzpicture}
+Take the first example given above of a vanilla counterpoint exercise. We can represent the starting pitches using integers - melody $A$ starts on $c$, which we'll call $0$ ($d=1$, \&c.), so let's notate it as $A@0$.  And let's put the intervals on the edges.
 
-If any two staves are present, the composition can be realized (transposition of one clef might be needed), but all three parts cannot be combined together.
+\begin{center}
+\includegraphics[scale=0.75]{graph1.eps}
+\end{center}
 
-Take the first example given above of a vanilla counterpoint exercise. We can represent the starting pitches using integers - melody $A$ starts on $c$, which we'll call $0$, so let's notate it as $A@0$.  And let's put the intervals on the edges.
+Note that if you travel in a loop and add up the nubmers as you go\footnote{negating them if they're on arrows facing the opposite direction}, you get $7+5-12=0$. It adds up to zero.
 
-\includegraphics[scale=0.5]{graph1.eps}
-
-note that if you travel in a loop, adding numbers as you go (or subtracting if you're going against an arrow), you get $7+5-12=0$. It adds up to zero.
-
-For our other graph, we no longer have fixed base positions, so we don't label the vertices, but we can still label the edges, to get this:
+For the impossible example, we no longer have fixed base positions, so we don't label the vertices, but we can still label the edges, to get this:
   
-\includegraphics[scale=0.5]{graph2.eps}
+\begin{center}
+\includegraphics[scale=0.75]{graph2.eps}
+\end{center}
 
-Note that the triangle no longer adds to $0$, but to $2$. Here's a made up graph of a more complicated system:
+Note that the triangle no longer adds to $0$, but to $2$. Here's a made-up graph of a more complicated system that could come from some specified system of voices:
 
-\includegraphics[scale=0.5]{graph3.eps}
+\begin{center}
+\includegraphics[scale=0.75]{graph3.eps}
+\end{center}
 
-If we're looking at a graph that shows what intervals are compatible between melodies, and we're looking for triangles where the intervals sum to zero.  (For four-part counterpoints, we're looking for tetrahedra where all the constituent triangles sum to zero).
+Looking at this graph, the edges tell you what voices can be harmonized with what other voices, and if you want 3 at once, you're looking for triangles where the edges sum to zero\footnote{This relates to a the fact that if all circuits sum to zero, you can assign numbers to the vertices such that an edge's value is the difference of its two vertices.  This is why the obstruction can be called an obstruction: its presence stops you from realizing a graph with nicely-labelled vertices.}.
 
-If I have a graph of intervals where all the circular paths sum to zero, I can assign definite pitches to each melody.
-
-Here's the analogy with manifolds and cohomological language:
+Here's the semi-precise insufficiently-explained analogy with manifolds and cohomological language:
 
 \begin{tabular}{ | c | c | c| }
 \hline
@@ -253,15 +240,23 @@ Here's the analogy with manifolds and cohomological language:
   chart             &   vertex                &  melody \\
   transition area   &   edges                 &  harmonizing pair \\
                     &   nerve                 &  graph of melodies+intervals  \\
-                    &   1-cocycle             &  interval choice            \\
+                    &   1-cocycle             &  interval choices           \\
                     &   1-coboundary          &  compatible intervals       \\
                     &   0-cocycle             &  assignment of pitches      \\
+                    &   obstruction           &  obstruction \\
                     \hline
 \end{tabular}
 
 \begin{definition}
 $H(m_1,m_2,i)$ express the proposition ``$m_1$ harmonizes with $m_2$ when at interval $i$.''
 \end{definition}
+
+For a given model of counterpoint, and a given obstruction, we can construct fun new voice-leading graphs. Here's one for a system with obstruction 3, showing ways of moving from one chord to another by changing a single note by a single step\footnote{Here's a program for calculating them : 
+\url{https://ded.increpare.com/~locus/comusic/leadingsgenerate.html}.}:
+
+\begin{center}
+\includegraphics[scale=0.5]{graph5.eps}
+\end{center}
 
 It's possible (and fun) to just go and write 3-staff counterpoints by hand, but here's a more algorithmic approach:
 
@@ -277,29 +272,6 @@ It's possible (and fun) to just go and write 3-staff counterpoints by hand, but 
   \item Complete subgraphs of $G$ in which all triangles sum to 0 are realizable counterpoints.
 \end{itemize}
 
+\url{https://ded.increpare.com/~locus/comusic/graphgenerate.html} is an implementation of this algorithm.  And here's one that does the same, but searches through canons instead: \url{https://ded.increpare.com/~locus/comusic/canongenerate.html}.
 
-\includegraphics[scale=0.5]{graph5.eps}
-
-Notes: 
-\begin{itemize}
-\item Mostly what appeals to me about this idea is the idea of an ``impossible'' species counterpont. 
-\item In terms of compositional usefulness, I think having a tool that you could input melodies into and that would output you a graph of possible ways of putting them together might be nice to have.
-\item 
-\item You can leave the diatonic world and take a set of chromatic constraints instead - it no longer is so nicely notatable with regular clefs, but computationally it's much the same, and can distinguish major/minor/diminished intervals properly.
-\item Also, there's no reason this wouldn't work for higher species.
-\item There's a balance to be struck between trying to adhere to mathematical formalism and trying to make it clear in and of itself.  I don't know how deeply the relationship goes - I don't think cohomology is the natural end-point for it - it branches off from the Čech cohomology construction before the cohomology group has been even defined (Penrose's paper basically did as well).  
-I'd probably be more inclined to take a computational direction first, implement something where if you give it a bunch of melody shapes it'll plot a nice graph of them, and see if anything interesting pops up from that.
-You could also ask questions like ``what melody has the most/fewest harmonizations''?  The answer would be an artefact of the countrapuntal moda sd
-\item You could do a reverse search where you specify a graph and it fills it out with melodies. That could be used to produce some contrapuntal curiosities, perhaps - maybe if you have two melodies that don't harmonize with eachother, you could search to see if you could find some set of accompanying melodies that can be combined with either of them.
-\item There's probably some category theory flavoured version of this possible as well (melodies are objects, valid harmonizations are morphisms).  
-
-A direction would be to ask what properties this category has - given two melodies, is there always a third that harmonizes with both? 
-\includegraphics[scale=0.5]{graph4.eps}
-
-Any interesting functors or natural transformations? I haven't thought this through at all, just thinking out loud.
-
-\item this is mostly me throwing associations at it seeing what sticks. Someone sees a black car and, remembering that they once had a black cat, asks if it meows.
-
-\item have a look at other papers that reference that Penrose paper, maybe there are some further fun tools that could be applicable there.
-\end{itemize}
 \end{document}

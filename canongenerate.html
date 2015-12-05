@@ -87,7 +87,7 @@ function calcualteCounterpoints(){
 		for (var j=0;j<basemelody.length;j++){
 			mel.push(basemelody[(i+j)%basemelody.length]);
 		}
-		melodies.push(mel);
+		melodies.push(mel.concat(mel));
 	}
 
 	var result = [];
@@ -144,19 +144,19 @@ function calcualteCounterpoints(){
 (intervals are 0-based, i.e. unison=0)
 <p>
 melody:
-<p>
+
 <input id="melody" value="0,1,2,3,2">
 <p>
 octave:
-<p>
+
 <input id="octave" value="7">
 <p>
 perfect intervals (0-based):
-<p>
+
 <input id="perfect" value="4">
 <p>
 imperfect intervals:
-<p>
+
 <input id="imperfect" value="2,5">
 <p>
 <button type="button" onclick="calcualteCounterpoints()">calculate</button>

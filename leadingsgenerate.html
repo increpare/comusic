@@ -1,0 +1,158 @@
+<html>
+<head>
+<script src="js/viz.js" type="text/javascript" charset="utf-8"></script>
+<script>
+function mkp(note){
+	if (perfect.indexOf(note)>=0){
+		return "<b>"+note+"</b>";
+	} else {
+		return note;
+	}
+}
+function printTable(chords,perfect){
+	var s = "";
+	for(var i=0;i<chords.length;i++){
+		var c = chords[i].map(mkp);
+
+		s+="("+c[0]+","+c[1]+","+c[2]+") ";
+	}	
+	return s;
+}
+
+function chordEquals(c1,c2){
+	return c1[0]==c2[0] && c1[1]==c2[1] && c1[2]==c2[2];
+}
+
+function chordValid(c){
+	for (var i=0;i<c.length;i++){
+		if (c[i]==0){
+			return false;
+		}
+		var pc = c[i]%octave;
+		if (validIntervals.indexOf(pc)<0){
+			return false;
+		}
+	}
+	return true;
+}
+
+var image;
+function calcualteIntervals(){
+	var str_perfect = document.getElementById("perfect").value;
+	var str_imperfect = document.getElementById("imperfect").value;
+	var str_octave = document.getElementById("octave").value;
+	var str_obstruction = document.getElementById("obstruction").value;
+
+	perfect = str_perfect.split(",").map(Number);
+	perfect.push(0);
+	imperfect = str_imperfect.split(",").map(Number);
+	octave = parseInt(str_octave);
+	validIntervals = perfect.concat(imperfect);
+	obstruction = parseInt(str_obstruction);
+
+	var output="obstruction : list of chords";
+	var chords = [];
+	for (var i=0;i<validIntervals.length;i++){
+		for (var j=0;j<validIntervals.length;j++){
+			var i1 = validIntervals[i];
+			var i2 = validIntervals[j];
+			if (i1==0||i2==0){
+				continue;
+			}
+			var sumpc = (i1+i2+obstruction)%octave;
+			if (validIntervals.indexOf(sumpc)>=0){
+				chords.push([i1,i2,i1+i2+obstruction]);
+			}
+		}
+	}
+
+	output+="<p>"+obstruction+" : "+printTable(chords,perfect);
+
+	var leadings = [];
+	var initchords=chords.length;
+	for (var l=0;l<initchords;l++){
+		var c = chords[l];
+		for (var i=0;i<2;i++){
+			for (var j=-1;j<2;j++){
+				var cnew = [c[0],c[1],c[2]];
+				cnew[i]+=j;
+				cnew[2]=cnew[0]+cnew[1]+obstruction;
+				var chordfound=false;
+				for (var k=0;k<chords.length;k++){
+					var leading=l+","+k;
+					if (chordEquals(cnew,chords[k])){
+						if (leadings.indexOf(leading)<0){
+							if (k>l){
+								leadings.push(leading);
+							}
+							chordfound=true;
+						}
+					} 
+				}
+				if (!chordfound){
+					if (chordValid(cnew)){
+						chords.push(cnew);
+						leading=l+","+(chords.length-1);
+						if (leadings.indexOf(leading)<0){
+							leadings.push(leading)
+						}
+					}
+				}
+			}	
+		}
+	}
+
+	var output="graph G {\n";
+	for (var i=0;i<chords.length;i++){
+		if (i<initchords){
+			output += i+" [ label=\""+chords[i]+"\" ]\n";
+		} else {
+			output += i+" [ style=\"dotted\" label=\""+chords[i]+"\" ]\n";
+		}
+	}
+	for (var i=0;i<leadings.length;i++){
+		var l = leadings[i].split(",");
+		output += l[0]+"--" +l[1]+";\n";
+	}
+	output+="\n}";
+	if (image!=null){
+		document.body.removeChild(image);
+	}
+	image = Viz(output, { format: "png-image-element" });
+	document.body.appendChild(image);
+
+	if (chords.length>initchords){
+		output+="chords with dotted borders are those where one of the first two intervals is greater than an octave - the algorithm only searches for leadings from chords where the first two intervals are less than an octave."
+	} else {		
+		//output="";
+	}
+	document.getElementById("output").innerHTML = output;
+
+}
+</script>
+</head>
+<body>
+(intervals are 0-based, i.e. unison=0)
+<p>
+octave:
+
+<input id="octave" value="7">
+<p>
+perfect intervals:
+
+<input id="perfect" value="4">
+<p>
+imperfect intervals:
+
+<input id="imperfect" value="2,3,5">
+<p>
+obstruction:
+
+<input id="obstruction" value="0">
+<p>
+<button type="button" onclick="calcualteIntervals()">calculate</button>
+<p>
+<div id = "output"></div>
+<script>calcualteIntervals();</script>
+</body>
+</html>

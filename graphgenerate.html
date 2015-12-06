@@ -139,7 +139,7 @@ function calcualteCounterpoints(){
 	}
 	image = Viz(output, { format: "png-image-element" });
 	document.body.appendChild(image);
-	document.getElementById("output").innerHTML = output;
+	document.getElementById("output").innerHTML = "";//output;
 	if (result.length==0){
 		document.getElementById("output").innerHTML = "no results found :(";
 	}
@@ -152,8 +152,10 @@ function calcualteCounterpoints(){
 melodies:
 <p>
 <textarea rows="4" cols="50" id="melodies">
-cat,0,2
-dog,0,0
+cat,0,1,2,3
+dog,0,0,2,2
+mouse,3,2,1,0
+cheese,0,3,0,3
 </textarea>
 <p>
 octave:

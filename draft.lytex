@@ -153,8 +153,8 @@ We can put these together using a modified version of the 3-part notation:
 \begin{lilypond}
 \new GrandStaff<< 
 \new Staff \with { instrumentName = #"A"} { 
+\omit Staff.Clef
 \clef "treble" 
-\override Staff.Clef.color = #grey
 \tweak color #red
 a'1-12 
 \tweak color #red
@@ -164,7 +164,7 @@ g'1-12
 \tweak color #red
 a'1-14}
 \new Staff \with { instrumentName = #"B"} { 
-\override Staff.Clef.color = #grey
+\omit Staff.Clef
 \clef "treble" 
 \tweak color #darkgreen
 d'1-4
@@ -175,7 +175,7 @@ d'1-3
 \tweak color #darkgreen
 c'1-5 }
 \new Staff \with { instrumentName = #"C"} { 
-\override Staff.Clef.color = #grey
+\omit Staff.Clef
 \clef "bass" 
 \tweak color #blue
 g1-4 
@@ -189,7 +189,7 @@ e1-5
 >>
 \end{lilypond}  
 
-But the interval numbers no longer add up vertically!  But they do have $bottom+medium+4=top$. Call $4$ the obstruction. The clefs are a fiction to make comparing adjoining staves easier. To work out if the counterpoint is correct, you need to know the intervals and the shape of the melody - you ignore the clefs.
+But the interval numbers no longer add up vertically!  But they do have $bottom+medium+4=top$. Call $4$ the obstruction. To work out if the counterpoint is correct, you just need to know the intervals and melodic steps.
 
 To write counterpoint of this form by hand, you use the following method:
 
@@ -253,7 +253,7 @@ Here's the semi-precise, insufficiently-explained analogy with manifolds and coh
 $H(m_1,m_2,i)$ express the proposition ``$m_1$ harmonizes with $m_2$ when at interval $i$.''
 \end{definition}
 
-For a given model of counterpoint, and a given obstruction, we can construct fun new voice-leading graphs. Here's one for a system with obstruction 3, showing ways of moving from one triad shape another by changing a single note by a single step\footnote{Here's a program for calculating them : 
+For a given model of counterpoint, and a given obstruction, we can construct parallel theories of voice leading. Here's something for a system with obstruction 3, showing ways of moving from one triad shape another by changing a single note by a single step\footnote{Here's a program for calculating them : 
 \url{https://ded.increpare.com/~locus/comusic/leadingsgenerate.html}.}:
 
 \begin{center}

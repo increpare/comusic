@@ -4,7 +4,7 @@
 
 <script>
 function mkp(note){
-	if (perfect.indexOf(note)>=0){
+	if (perfect.indexOf(note)>=0||(note%octave)==0){
 		return "<b>"+note+"</b>";
 	} else {
 		return note;
@@ -27,7 +27,7 @@ function calcualteIntervals(){
 	perfect = str_perfect.split(",").map(Number);
 	perfect.push(0);
 	var imperfect = str_imperfect.split(",").map(Number);
-	var octave = parseInt(str_octave);
+	octave = parseInt(str_octave);
 	var validIntervals = perfect.concat(imperfect);
 
 	var output="obstruction : list of chords";

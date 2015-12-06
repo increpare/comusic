@@ -1,0 +1,11 @@
+digraph G { 
+	layout=circo 
+	a->b[label=7] 
+	a->c[label=2] 
+	a->d[label=2] 
+	a->d[label=4] 
+	a->d[label=6] 
+	b->c[label=7] 
+	c->a[label=5] 
+	c->b[label=5] 
+}

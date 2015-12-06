@@ -1,9 +1,9 @@
 digraph G {
 	node [shape=circle fixedsize=true width=0.6 height=0.6 ]
-	a [ label="A@0"]
-	b [ label="B@7"]
-	c [ label="C@12"]
-	a -> b [ xlabel="7"];
-	b -> c [ xlabel="5"];
-	a -> c [ xlabel="12" ];
+	a [ label="A@3"]
+	b [ label="B@0"]
+	c [ label="C@-4"]
+	b -> a [ xlabel="3"];
+	c -> b [ xlabel="4"];
+	c -> a [ xlabel="7" ];
 }

@@ -139,7 +139,7 @@ function calcualteCounterpoints(){
 	}
 	image = Viz(output, { format: "png-image-element" });
 	document.body.appendChild(image);
-	document.getElementById("output").innerHTML = "";
+	document.getElementById("output").innerHTML = output;
 	if (result.length==0){
 		document.getElementById("output").innerHTML = "no results found :(";
 	}
@@ -166,7 +166,7 @@ perfect intervals (0-based):
 <p>
 imperfect intervals:
 
-<input id="imperfect" value="2,5">
+<input id="imperfect" value="2,3,5">
 <p>
 <button type="button" onclick="calcualteCounterpoints()">calculate</button>
 <p>

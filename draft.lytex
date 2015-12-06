@@ -64,7 +64,7 @@ Here's an elementary example of 3-part species counterpoint:
   }
 \end{lilypond}
 
-Here are three melody shapes that can be transposed so that any two of them can be played with eachother, but not all three at the same time.
+Here are three melodies that can be transposed so that any two of them can be played with eachother, but not all three at the same time.
 
 \begin{lilypond}
 \new GrandStaff << 
@@ -189,7 +189,7 @@ f1-2
 
 But the interval numbers no longer add up vertically!  But they do have $bottom+medium+3=top$. We call $3$ the obstruction. The clefs are a fiction to make comparing adjoining staves easier. To work out if the counterpoint is correct, you need to know the intervals and the shape of the melody - you ignore the clefs.
 
-To write counterpoint of this form by hand, you use the following method.
+To write counterpoint of this form by hand, you use the following method:
 
 \begin{itemize}
 \item Pick a source melody to harmonize.
@@ -208,7 +208,7 @@ This is an impossible to perform composition in the same way that the Penrose tr
 
 If any two pieces/melodies are present, the figure/composition can be realized (transposition of one clef might be needed), but all three parts cannot be combined together at once.
 
-Take the first example given above of a vanilla counterpoint exercise. We can represent the starting pitches using integers - melody $A$ starts on $c$, which we'll call $0$ ($d=1$, \&c.), so let's notate it as $A@0$.  And let's put the intervals on the edges.
+Take the first example given above of a vanilla counterpoint exercise. We can represent the starting pitches using integers - melody $A$ starts on $c$, which we'll call $0$ ($d=1$, \&c.), so let's notate it as $A@0$.  And let's label the edges with intervals:
 
 \begin{center}
 \includegraphics[scale=0.75]{graph1.eps}

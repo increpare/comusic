@@ -196,7 +196,7 @@ To write counterpoint of this form by hand, you use the following method:
 \begin{itemize}
 \item Pick a source melody to harmonize.
 \item Pick an obstruction.
-\item Write out all the impossible chords for this obstruction\footnote{I made a page here that generates them for you :
+\item Write out all the impossible triad shapes for this obstruction\footnote{I made a page here that generates them for you :
 \url{https://ded.increpare.com/~locus/comusic/chordgenerate.html}.}.
 \item Fill in the rest of the counterpoint.
 \end{itemize}
@@ -216,7 +216,7 @@ Take the first example given above of a vanilla counterpoint exercise. We can re
 \includegraphics[scale=0.75]{graph1.eps}
 \end{center}
 
-Note that if you travel in a loop and add up the numbers as you go\footnote{negating them if they're on arrows facing the opposite direction}, you get $7+5-12=0$. It adds up to zero.
+Note that if you travel in a loop and add up the numbers as you go\footnote{negating them if they're on arrows facing the opposite direction}, you get $3+4-7=0$. It adds up to zero.
 
 For the impossible example, we no longer have fixed base positions, so we don't label the vertices, but we can still label the edges, to get this:
   

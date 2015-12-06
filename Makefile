@@ -16,8 +16,8 @@ draft.pdf: draft.lytex $(SVGGRAPHS) $(DESTPNGS)
 	 cp out/draft.pdf draft.pdf
 
 out/%.png: %.png
-	mv $< $@
-	
+	cp $< $@
+
 out/%.eps: %.dot
 	neato -Teps $< > $@ 
 
